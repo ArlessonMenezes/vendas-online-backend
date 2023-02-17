@@ -1,5 +1,5 @@
 import { hashSync } from "bcrypt";
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -20,6 +20,15 @@ export class User {
 
   @Column({ nullable: false })
   password: string;
+
+  @Column({ name: 'type_user', nullable: false })
+  typeUser: string;
+
+  @CreateDateColumn({ type: 'datetime'  })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'datetime' })
+  updated_at: Date;
 
   @BeforeInsert()
   hashedPassowrd() {

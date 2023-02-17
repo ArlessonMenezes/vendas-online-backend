@@ -4,4 +4,5 @@ export class CreateUserDto {
   cpf: string;
   phone: string;
   password: string;
+  typeUser: string;
 }
