@@ -6,11 +6,11 @@ export class City {
   idCity: number;
   
   @Column({ nullable: false })
-  idState: number;
+  name: string;
   
   @Column({ nullable: false })
-  name: string;
-
+  idState: number;
+  
   @CreateDateColumn({ type: 'datetime'  })
   created_at: Date;
 
