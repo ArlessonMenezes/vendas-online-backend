@@ -10,8 +10,8 @@ export class CityController {
 
   @Get('/:idState')
   async getAllCitiesByIdState(
-    @Param('idState',ParseIntPipe) idState: number,
+    @Param('idState', ParseIntPipe) idState: number,
   ) {
-    return this.cityService.getAllCitiesByIdState(idState);
+    return this.cityService.getCitiesByIdState(idState);
   }
 }

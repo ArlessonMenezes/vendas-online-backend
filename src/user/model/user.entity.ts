@@ -22,7 +22,7 @@ export class User {
   password: string;
 
   @Column({ name: 'type_user', nullable: false })
-  typeUser: string;
+  typeUser: number;
 
   @CreateDateColumn({ type: 'datetime'  })
   created_at: Date;

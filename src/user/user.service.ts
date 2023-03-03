@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dtos/create-user.dto';
+import { ReturnUserDto } from './dtos/return-user.dto';
 import { User } from './model/user.entity';
 
 @Injectable()
@@ -29,9 +30,11 @@ export class UserService {
     return userReturn;
   }
 
-  async getAllUsers() {
-    return this.userRepository.find({
-      select: ['idUser', 'name', 'email', 'cpf', 'phone'],
-    });
+  async getAllUsers(): Promise<ReturnUserDto[]> {
+    const users = await this.userRepository.find();
+
+    const returnUsers = users.map(user => new ReturnUserDto(user))
+
+    return returnUsers;
   }
 }
