@@ -23,4 +23,10 @@ export class CityService {
       })
     );
   }
+
+  async findOneCityById(idCity: number) {
+    return this.cityRepository.findOne({
+      where: { idCity },
+    })
+  }
 }

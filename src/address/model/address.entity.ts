@@ -11,9 +11,6 @@ export class Address {
   @Column({ nullable: false })
   idCity: number;
   
-  @Column({ nullable: false })
-  name: string;
-  
   @Column({ nullable: true })
   complement: string;
 
