@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { City } from 'src/city/model/city.entity';
+import { User } from 'src/user/model/user.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Address {
@@ -25,4 +27,12 @@ export class Address {
 
   @UpdateDateColumn({ type: 'datetime' })
   updated_at: Date;
+
+  @ManyToOne(() => User, user => user.addresses)
+  @JoinColumn({ name: 'idUser', referencedColumnName: 'idUser' })
+  user?: User;
+
+  @ManyToOne(() => City, (city) => city.addresses)
+  @JoinColumn({ name: 'idCity', referencedColumnName: 'idCity' })
+  city?: City;
 }

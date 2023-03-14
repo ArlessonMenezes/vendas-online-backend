@@ -18,17 +18,12 @@ export class AddressService {
   async createAddress(createAddressDto: CreateAddressDto, idUser: number) {
     const user = await this.userService.findUserById(idUser);
 
-    if (!user) throw new NotFoundException('user not found');
-
-    const city = await this.cityService.findOneCityById(
-      createAddressDto.idCity
-    );
-
-    if (!city) throw new NotFoundException('city not found');
+    const city = await this.cityService.findCityById(createAddressDto.idCity);
 
     return this.addressRepository.save({
       ...createAddressDto, 
-      idUser,
+      idUser: user.idUser,
+      idCity: city.idCity,
     })
     
   }

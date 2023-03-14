@@ -1,5 +1,6 @@
 import { hashSync } from "bcrypt";
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Address } from "src/address/model/address.entity";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -29,6 +30,9 @@ export class User {
 
   @UpdateDateColumn({ type: 'datetime' })
   updated_at: Date;
+
+  @OneToMany(() => Address, address => address.user)
+  addresses?: Address[];
 
   @BeforeInsert()
   hashedPassowrd() {
