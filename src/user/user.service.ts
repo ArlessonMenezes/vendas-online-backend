@@ -35,7 +35,11 @@ export class UserService {
 
     return this.userRepository.findOne({
       where: { idUser },
-      relations: ['addresses'],
+      relations: {
+        addresses: {
+          city: { state: true }
+        }
+      },
     })
   }
 
