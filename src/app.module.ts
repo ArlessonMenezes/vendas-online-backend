@@ -10,6 +10,7 @@ import { City } from './city/model/city.entity';
 import { Address } from './address/model/address.entity';
 import { State } from './state/model/state.entity';
 import { CacheModule } from './cache/cache.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { CacheModule } from './cache/cache.module';
     StateModule,
     CityModule,
     AddressModule,
-    CacheModule
+    CacheModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],

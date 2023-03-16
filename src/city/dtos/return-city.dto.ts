@@ -8,6 +8,8 @@ export class ReturnCityDto {
 
   constructor(city: City) {
     this.name = city.name;
-    this.states = city.state ? new ReturnStateDto(city.state) : undefined;
+    this.states = city.state 
+    ? new ReturnStateDto(city.state) 
+    : undefined;
   }
 }
