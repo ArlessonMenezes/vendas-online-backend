@@ -14,8 +14,6 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   @Post()
   async login(@Body() loginDto: LoginDto) {
-    return new ReturnUserDto(
-      await this.authService.login(loginDto)
-    );
+    return this.authService.login(loginDto);
   }
 }
