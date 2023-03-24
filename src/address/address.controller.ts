@@ -1,5 +1,6 @@
 import { Body, Controller, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Roles } from 'src/decoratos/roles.decoratos';
+import { IdUser } from 'src/decoratos/user-id.decorator';
 import { UserTypeEnum } from 'src/user/enum/user-type.enum';
 
 import { AddressService } from './address.service';
@@ -12,12 +13,13 @@ export class AddressController {
     private readonly addressService: AddressService,
   ) {}
 
-  @Post('/:idUser')
+  @Post()
   @UsePipes(ValidationPipe)
   async createAddress(
-    @Param('idUser', ParseIntPipe) idUser: number, 
+    @IdUser() idUser: number, 
     @Body() createAddressDto: CreateAddressDto
   ){
+    console.log('idUser: ', idUser)
     return this.addressService.createAddress(createAddressDto, idUser);
   }
 }
