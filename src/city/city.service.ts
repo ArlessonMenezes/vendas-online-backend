@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CacheService } from 'src/cache/cache.service';
+import { CacheService } from '../cache/cache.service';
 import { Repository } from 'typeorm';
 
 import { City } from './model/city.entity';

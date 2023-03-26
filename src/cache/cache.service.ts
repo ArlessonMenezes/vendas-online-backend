@@ -1,8 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { City } from 'src/city/model/city.entity';
-import { State } from 'src/state/model/state.entity';
-import { Repository } from 'typeorm';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 @Injectable()

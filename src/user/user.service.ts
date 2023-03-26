@@ -14,11 +14,7 @@ export class UserService {
   ){}  
 
   async createUser(createUser: CreateUserDto) {
-    const user = await this.userRepository.findOne({
-      where: {
-        email: createUser.email
-      }
-    });
+    const user = await this.findUserByEmail(createUser.email);
 
     if (user) throw new BadRequestException('user alredy exists');
 
@@ -62,12 +58,8 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({
+    return this.userRepository.findOne({
       where: { email },
     })
-
-    if (!user) throw new NotFoundException('user not found');
-
-    return user;
   }  
 }

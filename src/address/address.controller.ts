@@ -1,12 +1,13 @@
-import { Body, Controller, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Roles } from 'src/decoratos/roles.decoratos';
-import { IdUser } from 'src/decoratos/user-id.decorator';
-import { UserTypeEnum } from 'src/user/enum/user-type.enum';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Roles } from '../decoratos/roles.decoratos';
+import { IdUser } from '../decoratos/user-id.decorator';
+import { UserTypeEnum } from '../user/enum/user-type.enum';
 
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dtos/create-address.dto';
+import { ReturnAddressDto } from './dtos/return-address.dto';
 
-@Roles(UserTypeEnum.User)
+@Roles(UserTypeEnum.User, UserTypeEnum.Admin)
 @Controller('address')
 export class AddressController {
   constructor(
@@ -21,5 +22,12 @@ export class AddressController {
   ){
     console.log('idUser: ', idUser)
     return this.addressService.createAddress(createAddressDto, idUser);
+  }
+
+  @Get()
+  @UsePipes(ValidationPipe)
+  async findAddressByIdUser(@IdUser() idUser: number) {
+    return (await this.addressService.findAddressByIdUser(idUser)
+    ).map((address) => new ReturnAddressDto(address));
   }
 }

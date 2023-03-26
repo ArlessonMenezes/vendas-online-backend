@@ -1,5 +1,4 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
-import { Column } from "typeorm";
 
 export class CreateAddressDto {
   @IsNumber()

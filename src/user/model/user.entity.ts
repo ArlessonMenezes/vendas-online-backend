@@ -1,5 +1,5 @@
 import { hashSync } from "bcrypt";
-import { Address } from "src/address/model/address.entity";
+import { Address } from "../../address/model/address.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
