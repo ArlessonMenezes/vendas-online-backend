@@ -28,8 +28,6 @@ export class AddressService {
   }
 
   async findAddressByIdUser(idUser: number) {
-    await this.userService.findUserById(idUser);
-
     const userHasAddress = await this.addressRepository.find({
       where: { idUser },
       relations: {
