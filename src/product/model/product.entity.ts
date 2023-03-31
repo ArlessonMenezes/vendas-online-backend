@@ -1,6 +1,7 @@
 import { Category } from 'src/category/model/category.entity';
-import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+@Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   idProduct: number;
@@ -24,9 +25,6 @@ export class Product {
   updatedAt: Date;
 
   @ManyToOne(() => Category, (category) => category.products)
-  @JoinColumn({
-    name: 'idCategory',
-    referencedColumnName: 'idCategory'
-  })
+  @JoinColumn({referencedColumnName: 'idCategory'})
   category?: Category;
 }
