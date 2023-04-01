@@ -25,6 +25,9 @@ export class Product {
   updatedAt: Date;
 
   @ManyToOne(() => Category, (category) => category.products)
-  @JoinColumn({referencedColumnName: 'idCategory'})
+  @JoinColumn({
+    name: 'idCategory',
+    referencedColumnName: 'idCategory'
+  })
   category?: Category;
 }
