@@ -33,9 +33,4 @@ export class User {
 
   @OneToMany(() => Address, address => address.user)
   addresses?: Address[];
-
-  @BeforeInsert()
-  hashedPassowrd() {
-    this.password = hashSync(this.password, 10)
-  }
 }

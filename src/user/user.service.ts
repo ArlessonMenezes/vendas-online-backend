@@ -1,9 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dtos/create-user.dto';
 import { ReturnUserDto } from './dtos/return-user.dto';
+import { UserTypeEnum } from './enum/user-type.enum';
 import { User } from './model/user.entity';
 
 @Injectable()
@@ -18,7 +20,14 @@ export class UserService {
 
     if (user) throw new BadRequestException('user alredy exists');
 
-    const newUser = this.userRepository.create(createUser);
+    const hashedPassword = await hash(createUser.password, 10);
+
+    const newUser = this.userRepository.create({
+      ...createUser,
+      typeUser: UserTypeEnum.User,
+      password: hashedPassword,
+    });
+
     await this.userRepository.save(newUser);
 
     const { password, ...userReturn } = newUser;
@@ -39,7 +48,7 @@ export class UserService {
     })
   }
 
-  async getAllUsers(): Promise<ReturnUserDto[]> {
+  async getAllUsers() {
     const users = await this.userRepository.find();
 
     const returnUsers = users.map(user => new ReturnUserDto(user))
