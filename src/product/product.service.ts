@@ -21,7 +21,7 @@ export class ProductService {
     if (!products || products.length === 0) 
       throw new NotFoundException('Products not found');
 
-    return products
+    return products;
   }
 
   async createProduct(createProductDto: CreateProductDto) {

@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dtos/create-user.dto';
 import { ReturnUserDto } from './dtos/return-user.dto';
+import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserTypeEnum } from './enum/user-type.enum';
 import { User } from './model/user.entity';
 
@@ -71,4 +72,27 @@ export class UserService {
       where: { email },
     })
   }  
+
+  async updatePassword(
+    idUser: number,
+    updatePassword: UpdatePasswordDto,
+  ) {
+    const user = await this.findUserById(idUser);
+
+    const passwordIsMatch = await compare(
+      updatePassword.password,
+      user.password
+    );
+
+    if (!passwordIsMatch) 
+      throw new BadRequestException('Password is invalid.');
+
+    const newHashedPassword = await hash(updatePassword.newPassword, 10);
+
+    await this.userRepository.update(user.idUser, {
+      password: newHashedPassword,
+    });
+
+    return { success:  "password changed successfully" };
+  }
 }
