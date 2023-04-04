@@ -30,17 +30,32 @@ export class ProductService {
 
     if (product) throw new BadRequestException('Product already exists');
 
-    await this.categoryService.findCategoryById(
+    const category = await this.categoryService.findCategoryById(
       createProductDto.idCategory
     );
 
-    // if (!category) throw new BadRequestException('Category does not exists');
+    if (!category) throw new BadRequestException('Category does not exists');
 
     const newProduct = this.productRepository.create({
       ...createProductDto,
-      // idCategory: category.idCategory, 
     });
   
     return this.productRepository.save(newProduct);
+  }
+
+  async findProductById(idProduct: number) {
+    const product = await this.productRepository.findOne({
+      where: { idProduct },
+    });
+
+    if (!product) throw new BadRequestException('Product not found');
+
+    return product;
+  }
+
+  async deleteProduct(idProduct: number) {
+    const product = await this.findProductById(idProduct);
+
+    await this.productRepository.remove(product);
   }
 }

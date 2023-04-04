@@ -1,5 +1,5 @@
-import { Controller, Get, Post, ValidationPipe } from '@nestjs/common';
-import { Body, UsePipes } from '@nestjs/common/decorators';
+import { Controller, Get, ParseIntPipe, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Delete, Param, UsePipes } from '@nestjs/common/decorators';
 import { Roles } from 'src/decoratos/roles.decoratos';
 import { UserTypeEnum } from 'src/user/enum/user-type.enum';
 import { CreateProductDto } from './dtos/create-product.dto';
@@ -26,5 +26,14 @@ export class ProductController {
     @Body() createProduct: CreateProductDto,
   ){
     return this.productService.createProduct(createProduct);
+  }
+
+  @Roles(UserTypeEnum.Admin)
+  @UsePipes(ValidationPipe) 
+  @Delete('/:idProduct')
+  async deleteProduct(
+    @Param('idProduct', ParseIntPipe) idProduct: number,
+  ){
+    return this.productService.deleteProduct(idProduct);
   }
 }

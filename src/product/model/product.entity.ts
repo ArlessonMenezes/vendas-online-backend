@@ -24,7 +24,7 @@ export class Product {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, { cascade: true })
   @JoinColumn({
     name: 'idCategory',
     referencedColumnName: 'idCategory'
