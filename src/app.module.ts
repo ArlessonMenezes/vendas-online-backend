@@ -19,6 +19,8 @@ import { State } from './state/model/state.entity';
 import { StateModule } from './state/state.module';
 import { User } from './user/model/user.entity';
 import { UserModule } from './user/user.module';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/model/cart.entity';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { UserModule } from './user/user.module';
       password: process.env.DB_PASSWORD,
       synchronize: true,
       autoLoadEntities: true,
-      entities: [User, City, Address, State, Category, Product], 
+      entities: [User, City, Address, State, Category, Product, Cart], 
     } as TypeOrmModuleOptions),
     UserModule,
     StateModule,
@@ -42,6 +44,7 @@ import { UserModule } from './user/user.module';
     JwtModule,
     CategoryModule,
     ProductModule,
+    CartModule,
   ],
   controllers: [],
   providers: [ 
