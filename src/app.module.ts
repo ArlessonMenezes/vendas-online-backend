@@ -8,6 +8,10 @@ import { AddressModule } from './address/address.module';
 import { Address } from './address/model/address.entity';
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from './cache/cache.module';
+import { CartProductModule } from './cart-product/cart-product.module';
+import { CartProduct } from './cart-product/model/cart-product.entity';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/model/cart.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/model/category.entity';
 import { CityModule } from './city/city.module';
@@ -19,8 +23,6 @@ import { State } from './state/model/state.entity';
 import { StateModule } from './state/state.module';
 import { User } from './user/model/user.entity';
 import { UserModule } from './user/user.module';
-import { CartModule } from './cart/cart.module';
-import { Cart } from './cart/model/cart.entity';
 
 @Module({
   imports: [
@@ -33,7 +35,16 @@ import { Cart } from './cart/model/cart.entity';
       password: process.env.DB_PASSWORD,
       synchronize: true,
       autoLoadEntities: true,
-      entities: [User, City, Address, State, Category, Product, Cart], 
+      entities: [
+        User,
+        City,
+        Address,
+        State,
+        Category,
+        Product,
+        Cart,
+        CartProduct,
+      ], 
     } as TypeOrmModuleOptions),
     UserModule,
     StateModule,
@@ -45,6 +56,7 @@ import { Cart } from './cart/model/cart.entity';
     CategoryModule,
     ProductModule,
     CartModule,
+    CartProductModule,
   ],
   controllers: [],
   providers: [ 
