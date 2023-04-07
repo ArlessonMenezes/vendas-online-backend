@@ -6,8 +6,11 @@ export class Cart {
   @PrimaryGeneratedColumn()
   idCart: number;
 
-  @Column()
+  @Column({ nullable: false })
   idUser: number;
+
+  @Column({ nullable: false })
+  active: boolean;
 
   @CreateDateColumn({ type: 'datetime'  })
   created_at: Date;
