@@ -9,7 +9,7 @@ export class Cart {
   @Column({ nullable: false })
   idUser: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, default: true })
   active: boolean;
 
   @CreateDateColumn({ type: 'datetime'  })

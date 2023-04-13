@@ -2,8 +2,9 @@ import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common
 import { Roles } from 'src/decoratos/roles.decoratos';
 import { IdUser } from 'src/decoratos/user-id.decorator';
 import { UserTypeEnum } from 'src/user/enum/user-type.enum';
+
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dtos/create-cart.dto';
+import { InsertProductInCartDto } from './dtos/insert-product-in-cart.dto';
 
 @Roles(UserTypeEnum.User, UserTypeEnum.Admin)
 @Controller('cart')
@@ -16,8 +17,11 @@ export class CartController {
   @Post()
   async createCart(
     @IdUser() idUser: number,
-    @Body() insertCart: CreateCartDto,
+    @Body() insertProductInCartDto: InsertProductInCartDto,
   ){
-    return this.cartService.insertProductInCart(insertCart, idUser);
+    return this.cartService.insertProductInCart(
+      insertProductInCartDto,
+      idUser,
+    );
   }
 }

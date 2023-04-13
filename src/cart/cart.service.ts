@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartProductService } from 'src/cart-product/cart-product.service';
 import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
-import { CreateCartDto } from './dtos/create-cart.dto';
 
+import { InsertProductInCartDto } from './dtos/insert-product-in-cart.dto';
 import { Cart } from './model/cart.entity';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class CartService {
     @InjectRepository(Cart)
     private readonly cartRepository: Repository<Cart>,
     private readonly productService: ProductService,
+    private readonly cartProductService: CartProductService,
   ){}
 
   async verifyActiveCart(idUser: number) {
@@ -34,7 +36,7 @@ export class CartService {
   }
 
   async insertProductInCart(
-    createCartDto: CreateCartDto,
+    insertProductInCartDto: InsertProductInCartDto,
     idUser: number,
   ) {
     const cart = await this.verifyActiveCart(idUser)
@@ -42,6 +44,18 @@ export class CartService {
       return this.createCart(idUser);
     });
 
-    return cart;
+    const product = await this.productService.findProductById(
+      insertProductInCartDto.idProduct
+    );
+
+    await this.cartProductService.inserProductInCart(
+      insertProductInCartDto,
+      cart
+    );
+
+    return await this.cartRepository.save({
+      idUser: cart.idUser,
+      cartProducts: product.cartProducts
+    });
   }
 }

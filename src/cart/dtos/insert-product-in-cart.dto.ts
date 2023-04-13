@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber } from "class-validator";
 
-export class CreateCartDto {
+export class InsertProductInCartDto {
   @IsNumber()
   @IsNotEmpty()
   idProduct: number;
