@@ -16,9 +16,17 @@ export class CartService {
     private readonly cartProductService: CartProductService,
   ){}
 
-  async verifyActiveCart(idUser: number) {
+  async findCartByIdUser(idUser: number, isRelations?: boolean) {
     const cart = await this.cartRepository.findOne({
-      where: { idUser }
+      where: {
+        idUser,
+        active: true,
+      },
+      relations: isRelations? {
+        cartProducts: {
+          product: true,
+        },
+      } : undefined
     });
 
     if (!cart) throw new NotFoundException('Cart not found');
@@ -39,23 +47,16 @@ export class CartService {
     insertProductInCartDto: InsertProductInCartDto,
     idUser: number,
   ) {
-    const cart = await this.verifyActiveCart(idUser)
+    const cart = await this.findCartByIdUser(idUser)
     .catch(async () => {
       return this.createCart(idUser);
     });
-
-    const product = await this.productService.findProductById(
-      insertProductInCartDto.idProduct
-    );
 
     await this.cartProductService.inserProductInCart(
       insertProductInCartDto,
       cart
     );
 
-    return await this.cartRepository.save({
-      idUser: cart.idUser,
-      cartProducts: product.cartProducts
-    });
+    return this.findCartByIdUser(idUser, true);
   }
 }

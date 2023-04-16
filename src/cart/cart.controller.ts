@@ -5,6 +5,7 @@ import { UserTypeEnum } from 'src/user/enum/user-type.enum';
 
 import { CartService } from './cart.service';
 import { InsertProductInCartDto } from './dtos/insert-product-in-cart.dto';
+import { ReturnCartDto } from './dtos/return-cart.dto';
 
 @Roles(UserTypeEnum.User, UserTypeEnum.Admin)
 @Controller('cart')
@@ -19,9 +20,11 @@ export class CartController {
     @IdUser() idUser: number,
     @Body() insertProductInCartDto: InsertProductInCartDto,
   ){
-    return this.cartService.insertProductInCart(
-      insertProductInCartDto,
-      idUser,
+    return new ReturnCartDto(
+      await this.cartService.insertProductInCart(
+        insertProductInCartDto,
+        idUser,
+      ),
     );
-  }
+  };
 }

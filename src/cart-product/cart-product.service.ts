@@ -3,6 +3,7 @@ import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertProductInCartDto } from 'src/cart/dtos/insert-product-in-cart.dto';
 import { Cart } from 'src/cart/model/cart.entity';
+import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
 import { CartProduct } from './model/cart-product.entity';
 
@@ -11,6 +12,7 @@ export class CartProductService {
   constructor(
     @InjectRepository(CartProduct)
     private readonly cartProductRepository: Repository<CartProduct>,
+    private readonly productService: ProductService,
   ){}
 
   async verifyProductInCart(
@@ -46,6 +48,10 @@ export class CartProductService {
     insertProductInCartDto: InsertProductInCartDto,
     cart: Cart
   ) {
+
+    await this.productService.findProductById(
+      insertProductInCartDto.idProduct
+    );
 
     const cartProduct = await this.verifyProductInCart(
       insertProductInCartDto.idProduct,

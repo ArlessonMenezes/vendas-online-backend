@@ -49,7 +49,7 @@ export class ProductService {
       where: { idProduct },
     });
 
-    if (!product) throw new BadRequestException('Product not found');
+    if (!product) throw new BadRequestException(`Product id ${idProduct} not found`);
 
     return product;
   }
