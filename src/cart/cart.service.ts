@@ -7,14 +7,29 @@ import { Repository } from 'typeorm';
 import { InsertProductInCartDto } from './dtos/insert-product-in-cart.dto';
 import { Cart } from './model/cart.entity';
 
+const LINE_EFFETCTED = 1;
+
 @Injectable()
 export class CartService {
   constructor(
     @InjectRepository(Cart)
     private readonly cartRepository: Repository<Cart>,
-    private readonly productService: ProductService,
     private readonly cartProductService: CartProductService,
   ){}
+
+  async clearCart(idUser: number) {
+    const cart = await this.findCartByIdUser(idUser, true);
+
+    await this.cartRepository.save({
+      ...cart,
+      active: false,
+    })
+
+    return {
+      raw: [],
+      affected: LINE_EFFETCTED,
+    }
+  }
 
   async findCartByIdUser(idUser: number, isRelations?: boolean) {
     const cart = await this.cartRepository.findOne({
@@ -29,7 +44,8 @@ export class CartService {
       } : undefined
     });
 
-    if (!cart) throw new NotFoundException('Cart not found');
+    if (!cart)
+      throw new NotFoundException('Cart active not found');
 
     return cart;
   }
@@ -57,6 +73,6 @@ export class CartService {
       cart
     );
 
-    return this.findCartByIdUser(idUser, true);
+    return cart;
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Roles } from 'src/decoratos/roles.decoratos';
 import { IdUser } from 'src/decoratos/user-id.decorator';
 import { UserTypeEnum } from 'src/user/enum/user-type.enum';
@@ -27,4 +27,17 @@ export class CartController {
       ),
     );
   };
+
+  @UsePipes(ValidationPipe)
+  @Get()
+  async findCartByidUser(@IdUser() idUser: number) {
+    return new ReturnCartDto(
+      await this.cartService.findCartByIdUser(idUser, true),
+    );
+  };
+
+  @Delete()
+  async clearCart(@IdUser() idUser: number) {
+    return this.cartService.clearCart(idUser);
+  }
 }
