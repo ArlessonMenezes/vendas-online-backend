@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertProductInCartDto } from 'src/cart/dtos/insert-product-in-cart.dto';
+import { UpdateProductInCart } from 'src/cart/dtos/update-product-in-cart.dto';
 import { Cart } from 'src/cart/model/cart.entity';
 import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
+
 import { CartProduct } from './model/cart-product.entity';
 
 @Injectable()
@@ -67,4 +69,32 @@ export class CartProductService {
       amount: cartProduct.amount + insertProductInCartDto.amount
     });
   }
-}
+
+  async deleteProductInCart(idProduct: number, idCart: number) {
+    await this.productService.findProductById(idProduct);
+
+    return this.cartProductRepository.delete({
+      idProduct,
+      idCart,
+    });
+  };
+
+  async updateProductInCart(
+    cart: Cart,
+    updateProductInCartDto: UpdateProductInCart,
+  ) {
+    await this.productService.findProductById(
+      updateProductInCartDto.idProduct
+    );
+
+    const cartProduct = await this.verifyProductInCart(
+      updateProductInCartDto.idProduct,
+      cart.idCart,
+    );
+    
+    return this.cartProductRepository.save({
+      ...cartProduct,
+      amount: updateProductInCartDto.amount,
+    })
+  }
+};
