@@ -23,6 +23,11 @@ import { State } from './state/model/state.entity';
 import { StateModule } from './state/state.module';
 import { User } from './user/model/user.entity';
 import { UserModule } from './user/user.module';
+import { PaymentStatusModule } from './payment-status/payment-status.module';
+import { PaymentModule } from './payment/payment.module';
+import { Payment } from './payment/model/payment.entity';
+import { PaymentPix } from './payment/model/payment-pix.entity';
+import { PaymentCreditCard } from './payment/model/payment-credit-card.entity';
 
 @Module({
   imports: [
@@ -44,6 +49,9 @@ import { UserModule } from './user/user.module';
         Product,
         Cart,
         CartProduct,
+        Payment,
+        PaymentPix,
+        PaymentCreditCard,
       ], 
     } as TypeOrmModuleOptions),
     UserModule,
@@ -57,6 +65,8 @@ import { UserModule } from './user/user.module';
     ProductModule,
     CartModule,
     CartProductModule,
+    PaymentStatusModule,
+    PaymentModule,
   ],
   controllers: [],
   providers: [ 
