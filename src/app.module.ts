@@ -28,6 +28,10 @@ import { PaymentModule } from './payment/payment.module';
 import { Payment } from './payment/model/payment.entity';
 import { PaymentPix } from './payment/model/payment-pix.entity';
 import { PaymentCreditCard } from './payment/model/payment-credit-card.entity';
+import { OrderModule } from './order/order.module';
+import { OrderProductModule } from './order-product/order-product.module';
+import { Order } from './order/model/order.entity';
+import { OrderProduct } from './order-product/model/order-product.entity';
 
 @Module({
   imports: [
@@ -52,6 +56,8 @@ import { PaymentCreditCard } from './payment/model/payment-credit-card.entity';
         Payment,
         PaymentPix,
         PaymentCreditCard,
+        Order,
+        OrderProduct,
       ], 
     } as TypeOrmModuleOptions),
     UserModule,
@@ -67,6 +73,8 @@ import { PaymentCreditCard } from './payment/model/payment-credit-card.entity';
     CartProductModule,
     PaymentStatusModule,
     PaymentModule,
+    OrderModule,
+    OrderProductModule,
   ],
   controllers: [],
   providers: [ 
