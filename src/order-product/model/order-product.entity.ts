@@ -1,9 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Order } from 'src/order/model/order.entity';
+import { Product } from 'src/product/model/product.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class OrderProduct {
+export class OrdersProduct {
   @PrimaryGeneratedColumn()
-  idOrderProduct: number;
+  idOrdersProduct: number;
 
   @Column()
   idOrder: number;
@@ -22,4 +24,12 @@ export class OrderProduct {
 
   @UpdateDateColumn({ type: 'datetime' })
   updated_at: Date;
+
+  @ManyToOne(() => Order, (order) => order.ordesProduct)
+  @JoinColumn({ name: 'idOrder', referencedColumnName: 'idOrder' })
+  order?: Order;
+
+  @ManyToOne(() => Product, (product) => product.ordersProduct)
+  @JoinColumn({ name: 'idProduct', referencedColumnName: 'idProduct' })
+  product?: Product;
 }

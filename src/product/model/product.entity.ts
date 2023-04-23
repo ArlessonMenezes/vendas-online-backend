@@ -1,5 +1,6 @@
 import { CartProduct } from 'src/cart-product/model/cart-product.entity';
 import { Category } from 'src/category/model/category.entity';
+import { OrdersProduct } from 'src/order-product/model/order-product.entity';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
@@ -34,4 +35,9 @@ export class Product {
     referencedColumnName: 'idCategory'
   })
   category?: Category;
+  
+  @OneToMany(() => OrdersProduct, (ordersProduct) => ordersProduct.product, { 
+    cascade: true
+  })
+  ordersProduct?: OrdersProduct[]
 }

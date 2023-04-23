@@ -1,6 +1,7 @@
 import { hashSync } from "bcrypt";
 import { Address } from "../../address/model/address.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Order } from "src/order/model/order.entity";
 
 @Entity()
 export class User {
@@ -33,4 +34,7 @@ export class User {
 
   @OneToMany(() => Address, address => address.user)
   addresses?: Address[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders?: Order[];
 }
