@@ -36,6 +36,9 @@ export abstract class Payment {
   orders?: Order[];
 
   @ManyToOne(() => PaymentStatus, (paymentStatus) => paymentStatus.payments)
-  @JoinColumn({ name: 'idPaymentStatus', referencedColumnName: 'idPaymentStatus' })
+  @JoinColumn({
+    name: 'idPaymentStatus',
+    referencedColumnName: 'idPaymentStatus'
+  })
   paymentStatus?: PaymentStatus;
 }
