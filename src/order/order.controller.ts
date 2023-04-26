@@ -1,4 +1,5 @@
 import { Body, Controller, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { PaymentService } from 'src/payment/payment.service';
 import { CreateOrderDto } from './dtos/create-order.dto';
 
 import { OrderService } from './order.service';
@@ -15,6 +16,6 @@ export class OrderController {
     @Param('idCart', ParseIntPipe) idCart: number,
     @Body() createOrderDto: CreateOrderDto,
   ){
-    return this.orderService.createOrder(idCart, createOrderDto);
+    return this.orderService.createOrder(createOrderDto, idCart);
   }
 }

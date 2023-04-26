@@ -23,8 +23,8 @@ export abstract class Payment {
   @Column()
   type: string;
 
-  @Column()
-  name: string;
+  @Column({ nullable: true })
+  name?: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -41,4 +41,16 @@ export abstract class Payment {
     referencedColumnName: 'idPaymentStatus'
   })
   paymentStatus?: PaymentStatus;
+
+  constructor(
+    idStatus: number,
+    price: number,
+    discount: number,
+    finalPrice: number,
+  ) {
+    this.idStatus = idStatus;
+    this.price = price;
+    this.discount = discount;
+    this.findalPrice = finalPrice;
+  }
 }
