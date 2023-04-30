@@ -1,3 +1,4 @@
+import { NotFoundException } from "@nestjs/common/exceptions";
 import { LoginPayloadDto } from "../auth/dtos/login-payload.dto"
 
 export const AuthorizationToLoginPayload = (
