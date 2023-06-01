@@ -13,16 +13,14 @@ export class OrderController {
     private readonly orderService: OrderService,
   ){}
 
-  @Post('/cart/:idCart')
+  @Post()
   @UsePipes(ValidationPipe)
   async createOrder(
-    @Param('idCart', ParseIntPipe) idCart: number,
     @Body() createOrderDto: CreateOrderDto,
     @IdUser() idUSer: number,
   ){
     return this.orderService.createOrder(
       createOrderDto,
-      idCart,
       idUSer,
     );
   }

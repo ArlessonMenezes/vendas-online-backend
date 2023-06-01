@@ -1,7 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartProduct } from 'src/cart-product/model/cart-product.entity';
+import { Cart } from 'src/cart/model/cart.entity';
 import { CreateOrderDto } from 'src/order/dtos/create-order.dto';
 import { PaymentTypeEnum } from 'src/payment-status/enums/payment-status.enum';
+import { Product } from 'src/product/model/product.entity';
 import { Repository } from 'typeorm';
 import { PaymentCreditCard } from './model/payment-credit-card.entity';
 import { PaymentPix } from './model/payment-pix.entity';
@@ -14,13 +17,30 @@ export class PaymentService {
     private readonly paymentRepository: Repository<Payment>,
   ){}
 
-  async createPayment(createOrderDto: CreateOrderDto) {
+  async createPayment(
+    createOrderDto: CreateOrderDto,
+    products: Product[],
+    cart: Cart,
+  ) {
+
+    const finalPrice = cart.cartProducts?.map((cartProduct: CartProduct) => {
+      const product = products.find(
+        (product) => product.idProduct === cartProduct.idProduct
+      );
+      if (product) {
+        return cartProduct.amount * product.price
+      }
+
+      return 0;
+    })
+    .reduce((accumalator, currentValue) => accumalator + currentValue, 0)
+
     if (createOrderDto.amountPayments) {
       const paymentCreditCard = new PaymentCreditCard(
         PaymentTypeEnum.DONE,
+        finalPrice,
         0,
-        0,
-        0,
+        finalPrice,
         createOrderDto,
       );
 
@@ -29,9 +49,9 @@ export class PaymentService {
     } else if (createOrderDto.codePix || createOrderDto.datePayment) {
       const paymentPix = new PaymentPix(
         PaymentTypeEnum.DONE,
+        finalPrice,
         0,
-        0,
-        0,
+        finalPrice,
         createOrderDto,
       );
 

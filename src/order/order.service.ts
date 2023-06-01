@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartProduct } from 'src/cart-product/model/cart-product.entity';
 import { CartService } from 'src/cart/cart.service';
+import { Cart } from 'src/cart/model/cart.entity';
 import { OrderProductService } from 'src/order-product/order-product.service';
+import { Payment } from 'src/payment/model/payment.entity';
 import { PaymentService } from 'src/payment/payment.service';
+import { Product } from 'src/product/model/product.entity';
 import { ProductService } from 'src/product/product.service';
 import { Repository } from 'typeorm';
 
@@ -21,41 +24,59 @@ export class OrderService {
     private readonly productService: ProductService,
   ){}
 
-  async createOrder(
+  async saveOrder(
     createOrderDto: CreateOrderDto,
-    idCart: number,
     idUser: number,
+    payment: Payment,
   ) {
-    
-    const payment = await this.paymentService.createPayment(createOrderDto);
 
-    const order = await this.orderRepository.save({
+    return await this.orderRepository.save({
       idAddress: createOrderDto.idAddress,
       date: new Date(),
       idPayment: payment.idPayment,
       idUser,  
-    });
+    });    
+  }
 
-    const cart = await this.cartService.findCartByIdUser(idUser, true);
-
-    const products = await this.productService.findAll(
-      cart.cartProducts.map(
-        (cartProduct) => cartProduct.idProduct
-      )
-    )
-
-    await Promise.all(
+  async createOrderProductUsingCart(cart: Cart, idOrder: number, products: Product[]) {
+    return Promise.all(
       cart.cartProducts.map((cartProduct) => {
         this.orderProductService.createOrderProduct(
           cartProduct.idProduct,
-          order.idOrder,
+          idOrder,
           products.find(
             (product) => product.idProduct === cartProduct.idProduct
           )?.price || 0,
           cartProduct.amount,
         );
     }));
+  }
 
-    return null;
+  async createOrder(
+    createOrderDto: CreateOrderDto,
+    idUser: number,
+  ) {
+
+    const cart = await this.cartService.findCartByIdUser(idUser, true);
+    
+    const products = await this.productService.findAll(
+      cart.cartProducts.map(
+        (cartProduct) => cartProduct.idProduct
+      )
+    )
+
+    const payment = await this.paymentService.createPayment(
+      createOrderDto,
+      products,
+      cart,
+    );
+
+    const order = await this.saveOrder(createOrderDto, idUser, payment);
+
+    await this.createOrderProductUsingCart(cart, order.idOrder, products);
+
+    await this.cartService.clearCart(idUser);
+
+    return order;
   }
 }

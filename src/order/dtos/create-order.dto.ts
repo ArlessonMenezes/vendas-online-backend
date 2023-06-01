@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateOrderDto {
   @IsNumber()
-  idAddress: number;
+  idAddress?: number;
 
   @IsOptional()
   @IsNumber()
