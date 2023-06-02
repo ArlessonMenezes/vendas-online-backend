@@ -17,23 +17,34 @@ export class PaymentService {
     private readonly paymentRepository: Repository<Payment>,
   ){}
 
+    generateFinalPrice(products: Product[], cart: Cart) {
+      if (!cart.cartProducts || cart.cartProducts.length === 0) {
+        return 0;
+      }
+
+      const finalPrice = cart.cartProducts?.map((cartProduct: CartProduct) => {
+        const product = products.find(
+          (product) => product.idProduct === cartProduct.idProduct
+        )
+
+        if (product) {
+          return cartProduct.amount * product.price;
+        }
+
+        return 0;
+      })
+      .reduce((accumulator, curranceValue) => accumulator + curranceValue, 0);
+
+      return finalPrice;
+    }
+
   async createPayment(
     createOrderDto: CreateOrderDto,
     products: Product[],
     cart: Cart,
   ) {
 
-    const finalPrice = cart.cartProducts?.map((cartProduct: CartProduct) => {
-      const product = products.find(
-        (product) => product.idProduct === cartProduct.idProduct
-      );
-      if (product) {
-        return cartProduct.amount * product.price
-      }
-
-      return 0;
-    })
-    .reduce((accumalator, currentValue) => accumalator + currentValue, 0)
+    const finalPrice = this.generateFinalPrice(products, cart)
 
     if (createOrderDto.amountPayments) {
       const paymentCreditCard = new PaymentCreditCard(
